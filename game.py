@@ -1,4 +1,3 @@
-
 import random
 import time
 from deck import deck
@@ -123,3 +122,34 @@ class game:
         #print("\033[H\033[J")
         print(f"\r[Deck] \nStack: {list(map(lambda x:x.__str__(),self.play_stack))} {self.stack_count}")
         print(*list(map(lambda x: "\n"+x.__str__()   ,(x for x in self.players))))
+
+
+    def game_loop(self):
+        self.stack_setup()
+        counter=0
+        while self.game_deck  or self.play_stack:
+          
+            self.player_turn(counter%len(self.players))
+            counter+=1
+            self.update_screen(self.last_human)
+        self.end_screen()
+        return self.winner()
+
+
+
+def setup():
+    print("\033[H\033[J")
+    print("Welcome to the game of decathlon")
+    num_pl=int(input("How many player will be joining us: "))
+    num_bt=int(input("How many bots?"))
+    players=[] 
+    for i in range(num_pl):
+
+        players.append(player(input(f"player {i+1} enter your name (it can not contain numbers): ")))
+        
+    for i in range(num_bt):
+        players.append(computer_player(f"bot {i+1}"))
+        
+    ga=game(*players)
+    
+    return ga
